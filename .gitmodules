@@ -1,6 +1,6 @@
 [submodule "cpm-hub"]
-	path = staging/cpm-hub/cpm-hub
+	path = cpm-hub/cpm-hub
 	url = git@github.com:jorsanpe/cpm-hub.git
 [submodule "cpm-hub-auth"]
-	path = staging/cpm-hub-auth/cpm-hub-auth
+	path = cpm-hub-auth/cpm-hub-auth
 	url = git@github.com:jorsanpe/cpm-hub-auth.git
