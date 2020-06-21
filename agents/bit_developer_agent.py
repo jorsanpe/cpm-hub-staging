@@ -4,15 +4,14 @@ import subprocess
 from http import HTTPStatus
 import requests
 import pexpect
-from subprocess import Popen, PIPE
+import cpm_project_editor
 
 from agent import Agent
 import logger
-import bits
 
 
 IDLE_TIME = 0.2
-BIT_USERS_DIRECTORY = 'bit_developers'
+BIT_DEVELOPERS_DIRECTORY = 'bit_developers'
 CPM_HUB_URL = 'http://localhost:8000'
 CPM_HUB_AUTH_URL = 'http://localhost:7003'
 
@@ -31,10 +30,10 @@ class BitDeveloperAgent(Agent):
             'publish_plugin',
         ]
         self.transition_matrix = {
-            'idle': [0.9, 0.1, 0, 0, 0],
+            'idle': [0.95, 0.05, 0, 0, 0],
             'request_invitation_token': [0, 0, 1, 0, 0],
             'register_with_valid_token': [0, 0, 0, 1, 0],
-            'idle_registered': [0, 0, 0, 0.90, 0.1],
+            'idle_registered': [0, 0, 0, 0.95, 0.05],
             'publish_plugin': [0, 0, 0, 1, 0],
         }
         self.entry_action = {
@@ -45,13 +44,14 @@ class BitDeveloperAgent(Agent):
             'publish_plugin': self.publish_plugin,
         }
         self.project_directory = self.create_cpm_project()
+        cpm_project_editor.bootstrap(self.project_directory, self.name)
 
     def create_cpm_project(self):
         subprocess.run(
             ['cpm', 'create', self.name],
-            cwd=BIT_USERS_DIRECTORY
+            cwd=BIT_DEVELOPERS_DIRECTORY
         )
-        return f'{BIT_USERS_DIRECTORY}/{self.name}'
+        return f'{BIT_DEVELOPERS_DIRECTORY}/{self.name}'
 
     def request_invitation_token(self):
         response = requests.post(f'{CPM_HUB_AUTH_URL}/otp/{self.name}')
@@ -82,12 +82,6 @@ class BitDeveloperAgent(Agent):
         child.expect([pexpect.TIMEOUT, "password:"])
         child.sendline(self.name)
         child.read()
-        # publish_process = Popen(['cpm', 'publish', '-s', f'{CPM_HUB_URL}/bits'], stdin=PIPE, stdout=PIPE)
-        # publish_process.stdin.write(f'{self.name}\n'.encode())
-        # publish_process.stdin.write(f'{self.name}\n'.encode())
-        # publish_process.communicate()
-        # publish_process.stdin.close()
-        bits.add_bit(bits.Bit(self.name, self.version))
 
     def idle(self):
         time.sleep(IDLE_TIME)

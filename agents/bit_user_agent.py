@@ -1,7 +1,7 @@
 import time
-import names
 import subprocess
 
+import cpm_project_editor
 from agent import Agent
 import bits
 
@@ -16,45 +16,50 @@ class BitUserAgent(Agent):
         self.name = name
         self.states = [
             'idle',
-            'download_latest_plugin_version',
-            'download_plugin_version',
-            'download_non_existing_plugin',
-            'download_invalid_plugin_version'
+            'install_latest_plugin_version',
+            'install_plugin_version',
+            'install_non_existing_plugin',
+            'install_invalid_plugin_version'
         ]
         self.transition_matrix = {
             'idle': [0.8, 0.2, 0, 0, 0],
-            'download_latest_plugin_version': [1, 0, 0, 0, 0],
-            'download_plugin_version': [1, 0, 0, 0, 0],
-            'download_non_existing_plugin': [1, 0, 0, 0, 0],
-            'download_invalid_plugin_version': [1, 0, 0, 0, 0],
+            'install_latest_plugin_version': [1, 0, 0, 0, 0],
+            'install_plugin_version': [1, 0, 0, 0, 0],
+            'install_non_existing_plugin': [1, 0, 0, 0, 0],
+            'install_invalid_plugin_version': [1, 0, 0, 0, 0],
         }
         self.entry_action = {
             'idle': self.idle,
-            'download_latest_plugin_version': self.download_latest_plugin_version,
-            'download_plugin_version': self.download_plugin_version,
-            'download_non_existing_plugin': self.download_non_existing_plugin,
-            'download_invalid_plugin_version': self.download_invalid_plugin_version,
+            'install_latest_plugin_version': self.install_latest_plugin_version,
+            'install_plugin_version': self.install_plugin_version,
+            'install_non_existing_plugin': self.install_non_existing_plugin,
+            'install_invalid_plugin_version': self.install_invalid_plugin_version,
         }
-        self.create_cpm_project()
+        self.project_directory = self.create_cpm_project()
+        cpm_project_editor.bootstrap(self.project_directory, self.name)
 
     def create_cpm_project(self):
         subprocess.run(
             ['cpm', 'create', self.name],
             cwd=BIT_USERS_DIRECTORY
         )
+        return f'{BIT_USERS_DIRECTORY}/{self.name}'
 
-    def download_latest_plugin_version(self):
+    def install_latest_plugin_version(self):
         bit = bits.random_bit()
-        print('download_latest_plugin_version')
+        subprocess.run(
+            ['cpm', 'install', bit],
+            cwd=self.project_directory
+        )
 
-    def download_plugin_version(self):
-        print('download_plugin_version')
+    def install_plugin_version(self):
+        print('install_plugin_version')
 
-    def download_non_existing_plugin(self):
-        print('download_non_existing_plugin')
+    def install_non_existing_plugin(self):
+        print('install_non_existing_plugin')
 
-    def download_invalid_plugin_version(self):
-        print('download_invalid_plugin_version')
+    def install_invalid_plugin_version(self):
+        print('install_invalid_plugin_version')
 
     def idle(self):
         time.sleep(IDLE_TIME)

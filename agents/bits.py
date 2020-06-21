@@ -1,22 +1,19 @@
+import os
 from collections import namedtuple
 import random
 import string
 
+from bit_developer_agent import BIT_DEVELOPERS_DIRECTORY
+
 Bit = namedtuple('Bit', ['name', 'version'])
 
 
-bits = [
-    # Bit('dummy', '1.0')
-]
-
-
-def add_bit(bit):
-    if bit not in bits:
-        bits.append(bit)
+def __bits_under_development():
+    return next(os.walk(BIT_DEVELOPERS_DIRECTORY))[1]
 
 
 def random_bit():
-    return random.choice(bits)
+    return random.choice(__bits_under_development())
 
 
 def __random_string(length=8):
