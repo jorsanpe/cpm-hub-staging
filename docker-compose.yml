@@ -1,0 +1,15 @@
+version: '3'
+services:
+  cpm_hub:
+    build: staging/cpm-hub
+    ports:
+      - 8000:8000
+      - 8001:8001
+    volumes:
+       - "./staging/cpm-hub/cpm-hub-auth:/cpm-hub-auth"
+  cpm_hub_auth:
+    build: staging/cpm-hub-auth
+    ports:
+      - 7003:7003
+    volumes:
+       - "./staging/cpm-hub-auth/cpm-hub-auth:/cpm-hub-auth"
