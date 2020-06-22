@@ -1,6 +1,5 @@
 import threading
 
-import agent_names
 import bit_developer_agent
 import bit_user_agent
 from agent import Agent
@@ -23,7 +22,7 @@ class SpawningAgent(Agent):
             'spawn_bit_developer_agent',
         ]
         self.transition_matrix = {
-            'idle': [0.95, 0.04, 0.01],
+            'idle': [0.90, 0.09, 0.01],
             'spawn_bit_user_agent': [1, 0, 0],
             'spawn_bit_developer_agent': [1, 0, 0],
         }
