@@ -1,5 +1,4 @@
 import json
-import time
 import subprocess
 from http import HTTPStatus
 import requests
@@ -10,16 +9,15 @@ from agent import Agent
 import logger
 
 
-IDLE_TIME = 0.2
 BIT_DEVELOPERS_DIRECTORY = 'bit_developers'
 CPM_HUB_URL = 'http://localhost:8000'
 CPM_HUB_AUTH_URL = 'http://localhost:7003'
 
 
 class BitDeveloperAgent(Agent):
-    def __init__(self, name):
+    def __init__(self):
+        super().__init__()
         self.current_state = 'idle'
-        self.name = name
         self.invitation_token = None
         self.version = '0.1'
         self.states = [
@@ -84,4 +82,4 @@ class BitDeveloperAgent(Agent):
         child.read()
 
     def idle(self):
-        time.sleep(IDLE_TIME)
+        pass

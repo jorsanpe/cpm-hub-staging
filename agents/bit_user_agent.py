@@ -1,4 +1,3 @@
-import time
 import subprocess
 
 import cpm_project_editor
@@ -6,14 +5,13 @@ from agent import Agent
 import bits
 
 
-IDLE_TIME = 0.2
 BIT_USERS_DIRECTORY = 'bit_users'
 
 
 class BitUserAgent(Agent):
-    def __init__(self, name):
+    def __init__(self):
+        super().__init__()
         self.current_state = 'idle'
-        self.name = name
         self.states = [
             'idle',
             'install_latest_plugin_version',
@@ -62,4 +60,4 @@ class BitUserAgent(Agent):
         print('install_invalid_plugin_version')
 
     def idle(self):
-        time.sleep(IDLE_TIME)
+        pass
