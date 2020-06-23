@@ -6,10 +6,10 @@ import pexpect
 import cpm_project_editor
 
 from agent import Agent
+import bits
 import logger
 
 
-BIT_DEVELOPERS_DIRECTORY = 'bit_developers'
 CPM_HUB_URL = 'http://localhost:8000'
 CPM_HUB_AUTH_URL = 'http://localhost:7003'
 
@@ -26,13 +26,17 @@ class BitDeveloperAgent(Agent):
             'register_with_valid_token',
             'idle_registered',
             'publish_plugin',
+            'install_latest_bit_version',
+            'add_bit_to_project',
         ]
         self.transition_matrix = {
-            'idle': [0.95, 0.05, 0, 0, 0],
-            'request_invitation_token': [0, 0, 1, 0, 0],
-            'register_with_valid_token': [0, 0, 0, 1, 0],
-            'idle_registered': [0, 0, 0, 0.95, 0.05],
-            'publish_plugin': [0, 0, 0, 1, 0],
+            'idle':                         [0.95, 0.05, 0, 0, 0, 0, 0],
+            'request_invitation_token':     [0, 0, 1, 0, 0, 0, 0],
+            'register_with_valid_token':    [0, 0, 0, 1, 0, 0, 0],
+            'idle_registered':              [0, 0, 0, 0.95, 0.04, 0.005, 0.005],
+            'publish_plugin':               [0, 0, 0, 1, 0, 0, 0],
+            'install_latest_bit_version':   [0, 0, 0, 1, 0, 0, 0],
+            'add_bit_to_project':   [0, 0, 0, 1, 0, 0, 0],
         }
         self.entry_action = {
             'idle': self.idle,
@@ -40,6 +44,8 @@ class BitDeveloperAgent(Agent):
             'register_with_valid_token': self.register_with_valid_token,
             'idle_registered': self.idle,
             'publish_plugin': self.publish_plugin,
+            'install_latest_bit_version': self.install_latest_bit_version,
+            'add_bit_to_project': self.add_bit_to_project,
         }
         self.project_directory = self.create_cpm_project()
         cpm_project_editor.bootstrap(self.project_directory, self.name)
@@ -47,9 +53,9 @@ class BitDeveloperAgent(Agent):
     def create_cpm_project(self):
         subprocess.run(
             ['cpm', 'create', self.name],
-            cwd=BIT_DEVELOPERS_DIRECTORY
+            cwd=bits.BIT_DEVELOPERS_DIRECTORY
         )
-        return f'{BIT_DEVELOPERS_DIRECTORY}/{self.name}'
+        return f'{bits.BIT_DEVELOPERS_DIRECTORY}/{self.name}'
 
     def request_invitation_token(self):
         response = requests.post(f'{CPM_HUB_AUTH_URL}/otp/{self.name}')
@@ -80,6 +86,21 @@ class BitDeveloperAgent(Agent):
         child.expect([pexpect.TIMEOUT, "password:"])
         child.sendline(self.name)
         child.read()
+
+    def install_latest_bit_version(self):
+        bit = bits.random_bit()
+        subprocess.run(
+            ['cpm', 'install', bit.name],
+            cwd=self.project_directory
+        )
+
+    def add_bit_to_project(self):
+        bit = bits.random_bit()
+        cpm_project_editor.add_bit(self.project_directory, bit)
+        subprocess.run(
+            ['cpm', 'install'],
+            cwd=self.project_directory
+        )
 
     def idle(self):
         pass

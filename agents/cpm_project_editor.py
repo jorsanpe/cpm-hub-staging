@@ -17,7 +17,7 @@ def __add_package(project_directory, package_name):
         yaml.dump(project_descriptor, stream)
 
 
-def __set_version(project_directory, version):
+def set_version(project_directory, version):
     with open(f'{project_directory}/project.yaml') as stream:
         project_descriptor = yaml.safe_load(stream)
     project_descriptor['version'] = version
@@ -25,7 +25,23 @@ def __set_version(project_directory, version):
         yaml.dump(project_descriptor, stream)
 
 
+def bit_version(project_directory):
+    with open(f'{project_directory}/project.yaml') as stream:
+        project_descriptor = yaml.safe_load(stream)
+    return project_descriptor['version']
+
+
+def add_bit(project_directory, bit):
+    with open(f'{project_directory}/project.yaml') as stream:
+        project_descriptor = yaml.safe_load(stream)
+    project_descriptor['bits'] = {
+        bit.name: bit.version
+    }
+    with open(f'{project_directory}/project.yaml', 'w') as stream:
+        yaml.dump(project_descriptor, stream)
+
+
 def bootstrap(project_directory, project_name):
     __add_package(project_directory, project_name)
-    __set_version(project_directory, '1.0')
+    set_version(project_directory, '1.0')
 

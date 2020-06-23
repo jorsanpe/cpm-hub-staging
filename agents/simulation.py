@@ -20,4 +20,4 @@ def run_simulation(duration=10, num_bit_developers=1, num_bit_users=1, ):
     agent.stop()
 
 
-run_simulation(duration=60)
+run_simulation(duration=120)

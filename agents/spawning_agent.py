@@ -22,7 +22,7 @@ class SpawningAgent(Agent):
             'spawn_bit_developer_agent',
         ]
         self.transition_matrix = {
-            'idle': [0.90, 0.09, 0.01],
+            'idle': [0.90, 0.08, 0.02],
             'spawn_bit_user_agent': [1, 0, 0],
             'spawn_bit_developer_agent': [1, 0, 0],
         }

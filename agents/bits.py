@@ -3,17 +3,24 @@ from collections import namedtuple
 import random
 import string
 
-from bit_developer_agent import BIT_DEVELOPERS_DIRECTORY
+import cpm_project_editor
 
+
+BIT_DEVELOPERS_DIRECTORY = 'bit_developers'
 Bit = namedtuple('Bit', ['name', 'version'])
 
 
-def __bits_under_development():
+def __all_bit_names():
     return next(os.walk(BIT_DEVELOPERS_DIRECTORY))[1]
 
 
 def random_bit():
-    return random.choice(__bits_under_development())
+    all_bits = __all_bit_names()
+    if all_bits:
+        bit_name = random.choice(all_bits)
+        bit_version = cpm_project_editor.bit_version(f'{BIT_DEVELOPERS_DIRECTORY}/{bit_name}')
+        return Bit(bit_name, bit_version)
+    return Bit(__random_string(), '1.0')
 
 
 def __random_string(length=8):

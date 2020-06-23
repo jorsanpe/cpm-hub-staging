@@ -21,5 +21,6 @@ clean:
 	$(RM) -r $(CPM_HUB_AUTH_USERS_DIRECTORY)
 	$(RM) -r $(BIT_DEVELOPERS_DIRECTORY)
 	$(RM) -r $(BIT_USERS_DIRECTORY)
+	$(RM) agents/simulation.log
 
 .PHONY: simulation clean cpm-hub/cpm-hub/build/cpm-hub
