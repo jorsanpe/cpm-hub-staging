@@ -36,7 +36,7 @@ class BitDeveloperAgent(Agent):
             'idle_registered':              [0, 0, 0, 0.95, 0.04, 0.005, 0.005],
             'publish_plugin':               [0, 0, 0, 1, 0, 0, 0],
             'install_latest_bit_version':   [0, 0, 0, 1, 0, 0, 0],
-            'add_bit_to_project':   [0, 0, 0, 1, 0, 0, 0],
+            'add_bit_to_project':           [0, 0, 0, 1, 0, 0, 0],
         }
         self.entry_action = {
             'idle': self.idle,
