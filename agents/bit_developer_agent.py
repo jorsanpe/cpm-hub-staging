@@ -33,7 +33,7 @@ class BitDeveloperAgent(Agent):
             'idle':                         [0.95, 0.05, 0, 0, 0, 0, 0],
             'request_invitation_token':     [0, 0, 1, 0, 0, 0, 0],
             'register_with_valid_token':    [0, 0, 0, 1, 0, 0, 0],
-            'idle_registered':              [0, 0, 0, 0.95, 0.04, 0.005, 0.005],
+            'idle_registered':              [0, 0, 0, 0.90, 0.09, 0.005, 0.005],
             'publish_plugin':               [0, 0, 0, 1, 0, 0, 0],
             'install_latest_bit_version':   [0, 0, 0, 1, 0, 0, 0],
             'add_bit_to_project':           [0, 0, 0, 1, 0, 0, 0],

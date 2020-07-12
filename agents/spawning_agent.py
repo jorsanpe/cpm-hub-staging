@@ -5,6 +5,9 @@ import bit_user_agent
 from agent import Agent
 
 
+MAX_POPULATION = 400
+
+
 def agent_loop(agent):
     while agent.alive:
         agent.next_step()
@@ -43,7 +46,12 @@ class SpawningAgent(Agent):
     def idle(self):
         pass
 
+    def __current_population(self):
+        return len(self.agents)
+
     def spawn_bit_user_agent(self):
+        if self.__current_population() >= MAX_POPULATION:
+            return
         agent = bit_user_agent.BitUserAgent()
         agent_thread = threading.Thread(target=agent_loop, args=(agent,))
         agent_thread.start()
@@ -51,6 +59,8 @@ class SpawningAgent(Agent):
         self.agents.append(agent)
 
     def spawn_bit_developer_agent(self):
+        if self.__current_population() >= MAX_POPULATION:
+            return
         agent = bit_developer_agent.BitDeveloperAgent()
         agent_thread = threading.Thread(target=agent_loop, args=(agent,))
         agent_thread.start()

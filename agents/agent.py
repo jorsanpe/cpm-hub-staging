@@ -17,5 +17,8 @@ class Agent(object):
         next_state = numpy.random.choice(self.states, replace=True, p=self.transition_matrix[self.current_state])
         logger.message(f'{type(self).__name__}({self.name}): {self.current_state} -> {next_state}')
         self.current_state = next_state
-        self.entry_action[next_state]()
+        try:
+            self.entry_action[next_state]()
+        except RuntimeError as e:
+            logger.message(f'{type(self).__name__}({self.name}): Failed {next_state} ({str(e)})')
         time.sleep(DELAY_BETWEEN_ACTIONS)

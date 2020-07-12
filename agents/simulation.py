@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import threading
 import time
+from pathlib import Path
+import shutil
 
 import spawning_agent
 
@@ -20,4 +22,19 @@ def run_simulation(duration=10, num_bit_developers=1, num_bit_users=1, ):
     agent.stop()
 
 
-run_simulation(duration=120)
+home = str(Path.home())
+local_cpm_config_file = f'{home}/.cpm.yaml'
+
+try:
+    shutil.copy2(local_cpm_config_file, 'cpm.yaml.bak')
+except:
+    pass
+
+shutil.copy2('cpm.yaml.staging', local_cpm_config_file)
+
+run_simulation(duration=600)
+
+try:
+    shutil.copy2('cpm.yaml.bak', local_cpm_config_file)
+except:
+    pass

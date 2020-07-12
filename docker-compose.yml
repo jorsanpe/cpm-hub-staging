@@ -13,3 +13,11 @@ services:
       - 7003:7003
     volumes:
        - "./cpm-hub-auth/users:/users"
+  influxdb:
+    image: influxdb:latest
+    environment:
+      - INFLUXDB_DB=mydb
+    ports:
+      - 8086:8086
+    volumes:
+       - "./influxdb:/var/lib/influxdb"
